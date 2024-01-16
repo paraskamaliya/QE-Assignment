@@ -7,7 +7,7 @@ const { ListModel } = require("../model/list.model");
 const { auth } = require("../middlewares/auth.middleware");
 
 userRouter.post("/register", async (req, res) => {
-    let { username, email, password } = req.body;
+    let { username, email, password, roles } = req.body;
     let user = await UserModel.findOne({ email })
     try {
         if (user) {
@@ -17,7 +17,7 @@ userRouter.post("/register", async (req, res) => {
             bcrypt.hash(password, 5, async (err, hash) => {
                 if (hash) {
                     const user = new UserModel({
-                        username, email, password: hash, roles: ["VIEW_ALL"]
+                        username, email, password: hash, roles: roles
                     })
                     await user.save()
                     res.status(200).send({ "message": "User is registered" })
@@ -40,7 +40,7 @@ userRouter.post("/login", async (req, res) => {
         if (user) {
             bcrypt.compare(password, user.password, (err, result) => {
                 if (result) {
-                    const token = jwt.sign({ username: user.username, userId: user._id }, "user", { expiresIn: "1h" });
+                    const token = jwt.sign({ username: user.username, userId: user._id, roles: user.roles }, "user", { expiresIn: "1h" });
                     res.status(200).send({ "message": "Successfully login", "token": token, "user": user })
                 }
                 else {

@@ -6,20 +6,25 @@ const bookRouter = express.Router();
 
 bookRouter.use(auth)
 
-bookRouter.get("/all", async (req, res) => {
+bookRouter.get("/", async (req, res) => {
     const { new: isNew, old: isOld } = req.query;
     try {
         let books;
-        if (isNew) {
-            const tenMinutesAgo = new Date();
-            tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-            books = await BookModel.find({ date: { $gt: tenMinutesAgo } }).sort({ date: 1 });
-        } else if (isOld) {
-            const tenMinutesAgo = new Date();
-            tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-            books = await BookModel.find({ date: { $lte: tenMinutesAgo } }).sort({ date: -1 });
-        } else {
-            books = await BookModel.find();
+        if (req.body.roles.includes("VIEW_ALL")) {
+            if (isNew) {
+                const tenMinutesAgo = new Date();
+                tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
+                books = await BookModel.find({ date: { $gt: tenMinutesAgo } }).sort({ date: 1 });
+            } else if (isOld) {
+                const tenMinutesAgo = new Date();
+                tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
+                books = await BookModel.find({ date: { $lte: tenMinutesAgo } }).sort({ date: -1 });
+            } else {
+                books = await BookModel.find();
+            }
+        }
+        else if (req.body.roles.includes("VIEWER")) {
+            books = await BookModel.find({ userId: req.body.userId })
         }
         res.status(200).send(books);
     } catch (error) {
@@ -27,16 +32,8 @@ bookRouter.get("/all", async (req, res) => {
     }
 })
 
-bookRouter.get("/", async (req, res) => {
-    try {
-        let books = await BookModel.find({ userId: req.body.userId })
-        res.status(200).send(books);
-    } catch (error) {
-        res.status(400).send({ "msg": "Something went wrong", "err": error })
-    }
-})
 
-bookRouter.post("/add", isCreator, async (req, res) => {
+bookRouter.post("/", isCreator, async (req, res) => {
     const { title, description, cover, author, genre, username, userId } = req.body;
     try {
         const book = new BookModel({
