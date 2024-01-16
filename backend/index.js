@@ -2,8 +2,9 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const morgan = require('morgan');
-const winston = require('winston');
 const mongoose = require("mongoose");
+const fs = require('fs');
+const path = require('path')
 
 const { userRouter } = require("./router/user.router");
 const { bookRouter } = require("./router/book.router");
@@ -15,14 +16,8 @@ app.use(cors());
 app.use("/users", userRouter);
 app.use("/books", bookRouter)
 
-const logger = winston.createLogger({
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'api.log' })
-    ]
-});
-
-app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
+const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
+app.use(morgan('combined', { stream: logStream }));
 
 app.get("/", (req, res) => {
     res.end("Welcome to LMS");
