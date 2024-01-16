@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
     if (token) {
         const tkn = await ListModel.findOne({ token });
         if (!tkn) {
-            jwt.verify(token, "users", (err, decoded) => {
+            jwt.verify(token, "user", (err, decoded) => {
                 if (err) {
                     res.status(202).send({ err: err.message });
                 } else {
