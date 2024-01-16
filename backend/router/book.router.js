@@ -15,7 +15,6 @@ bookRouter.get("/", async (req, res) => {
         } else if (req.body.roles.includes("VIEWER")) {
             const tenMinutesAgo = new Date();
             tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-            console.log(tenMinutesAgo);
             if (isNew) {
                 books = await BookModel.find({ userId: req.body.userId, date: { $gte: tenMinutesAgo } }).sort({ date: 1 });
             } else if (isOld) {
