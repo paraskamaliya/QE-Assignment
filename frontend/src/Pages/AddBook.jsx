@@ -1,10 +1,11 @@
-import { Box, Button, Input, Select } from "@chakra-ui/react"
+import { Box, Button, Input, Select, useToast } from "@chakra-ui/react"
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const AddBook = () => {
     const URL = "https://lms-gr4j.onrender.com/";
     const auth = useSelector(store => store);
+    const toast = useToast();
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -22,7 +23,7 @@ const AddBook = () => {
             genre
         }
         try {
-            let res = await fetch(`${URL}books/add`, {
+            let res = await fetch(`${URL}books/`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`,
@@ -30,10 +31,23 @@ const AddBook = () => {
                 },
                 body: JSON.stringify(payload)
             })
-            let data = await res.json();
-            console.log(data);
+            if (res.status == 200) {
+                toast({
+                    title: "Book data is Added",
+                    description: "Book data is added to collection",
+                    duration: 3000,
+                    isClosable: true,
+                    status: "success"
+                })
+            }
         } catch (error) {
-            console.log(error);
+            toast({
+                title: "Something went wrong",
+                description: "Something went wrong, Please try again",
+                duration: 3000,
+                isClosable: true,
+                status: "error"
+            })
         }
     }
     return <Box display={"flex"} height={"90vh"} alignItems={"center"} bg={"#ffc1fb"} color={"black"}>

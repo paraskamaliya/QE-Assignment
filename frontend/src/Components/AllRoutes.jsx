@@ -5,8 +5,8 @@ import AddBook from "../Pages/AddBook";
 
 const AllRoutes = () => {
     return <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/books" element={<Home />} />
         <Route path="/add" element={<AddBook />} />
     </Routes>
 }

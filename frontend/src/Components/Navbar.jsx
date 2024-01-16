@@ -43,20 +43,20 @@ const Navbar = () => {
             </Box>
             <Box>
                 {auth.isAuth == false ?
-                    <ChakraLink as={Link} to="/login" _hover={{ textDecoration: "none" }} fontSize={"larger"}>
-                        Login
+                    <ChakraLink as={Link} to="/books" _hover={{ textDecoration: "none" }} fontSize={"larger"}>
+                        Books
                     </ChakraLink>
                     : <Menu>
                         <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} rightIcon={<ChevronDownIcon fontSize={"2xl"} color={"white"} />}>
                             <Avatar src={`https://bit.ly/`} name={auth.user.username} />
                         </MenuButton>
                         <MenuList>
+                            <MenuItem textAlign={"center"} borderBottom={"1px solid black"}>
+                                <Link to={"/books"} style={{ width: "100%", fontWeight: 500, fontSize: "larger", color: "black" }}>Books</Link>
+                            </MenuItem>
                             {auth.user.roles.includes("CREATOR") && <MenuItem textAlign={"center"} borderBottom={"1px solid black"}>
                                 <Link to={"/add"} style={{ width: "100%", fontWeight: 500, fontSize: "larger", color: "black" }}>Add Book</Link>
                             </MenuItem>}
-                            <MenuItem textAlign={"center"} borderBottom={"1px solid black"}>
-                                <Link to={"/mybooks"} style={{ width: "100%", fontWeight: 500, color: "black", fontSize: "larger" }}>My Books</Link>
-                            </MenuItem>
                             <MenuItem textAlign={"center"}>
                                 <Button style={{ margin: "auto", width: "100%", fontWeight: 500, fontSize: "larger", background: "red", color: "white" }} onClick={onOpen}>Logout</Button>
                                 <AlertDialog
