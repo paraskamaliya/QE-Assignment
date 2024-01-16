@@ -218,7 +218,7 @@ const Login = () => {
     }
 
     return <Box display={"flex"} height={"90vh"} alignItems={"center"} bg={"#ffc1fb"} color={"black"}>
-        <Tabs w={["100%", "100%", "80%", "50%", "50%"]} isFitted variant={"soft-rounded"} colorScheme="purple" m={"auto"} justifyContent={"center"} p={"2%"}>
+        <Tabs w={["100%", "100%", "80%", "50%", "50%"]} isFitted variant={"soft-rounded"} colorScheme="blue" m={"auto"} justifyContent={"center"} p={"2%"}>
             <TabList m={"auto"} textAlign={"center"} >
                 <Tab m={"auto"} fontSize={"larger"} >Login</Tab>
                 <Tab m={"auto"} fontSize={"larger"} >Register</Tab>
@@ -227,10 +227,10 @@ const Login = () => {
                 <TabPanel>
                     <FormControl textAlign={"center"} w={"90%"} m={"auto"}>
                         <InputGroup>
-                            <Input placeholder="Enter Registered Email" type="email" isRequired m={1} value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} id="loginEmail" borderColor={"purple.500"} />
+                            <Input placeholder="Enter Registered Email" type="email" isRequired m={1} value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} id="loginEmail" borderColor={"purple.500"} bgColor={"white"} />
                         </InputGroup>
                         <InputGroup w={"100%"}>
-                            <Input placeholder="Enter Password" type={LoginVisible ? "text" : "password"} isRequired m={1} value={loginPass} onChange={(e) => setLoginPass(e.target.value)} id="loginPassword" borderColor={"purple.500"} />
+                            <Input placeholder="Enter Password" type={LoginVisible ? "text" : "password"} isRequired m={1} value={loginPass} onChange={(e) => setLoginPass(e.target.value)} id="loginPassword" borderColor={"purple.500"} bgColor={"white"} />
                             <InputRightElement m={1} >
                                 <IconButton onClick={loginhandleClick} size={"sm"} fontSize={"md"} colorScheme="purple" icon={LoginVisible ? <ViewOffIcon /> : <ViewIcon />} />
                             </InputRightElement>
@@ -241,24 +241,24 @@ const Login = () => {
                 <TabPanel>
                     <FormControl textAlign={"center"} w={"90%"} m={"auto"}>
                         <InputGroup>
-                            <Input placeholder="Enter Username" id="username" type="text" isRequired m={1} value={username} onChange={(e) => setUsername(e.target.value)} borderColor={"purple.500"} />
+                            <Input placeholder="Enter Username" id="username" type="text" isRequired m={1} value={username} onChange={(e) => setUsername(e.target.value)} borderColor={"purple.500"} bgColor={"white"} />
                         </InputGroup>
                         <InputGroup>
-                            <Input placeholder="Enter Email" type="email" id="email" isRequired m={1} value={email} onChange={(e) => setEmail(e.target.value)} borderColor={"purple.500"} />
+                            <Input placeholder="Enter Email" type="email" id="email" isRequired m={1} value={email} onChange={(e) => setEmail(e.target.value)} borderColor={"purple.500"} bgColor={"white"} />
                         </InputGroup>
                         <InputGroup>
-                            <Input placeholder="Enter Password" type={visible1 ? "text" : "password"} id="password" isRequired m={1} value={password} onChange={(e) => setPassword(e.target.value)} borderColor={"purple.500"} />
+                            <Input placeholder="Enter Password" type={visible1 ? "text" : "password"} id="password" isRequired m={1} value={password} onChange={(e) => setPassword(e.target.value)} borderColor={"purple.500"} bgColor={"white"} />
                             <InputRightElement m={1} >
                                 <IconButton onClick={handleClick1} size={"sm"} fontSize={"md"} colorScheme="purple" icon={visible1 ? <ViewOffIcon /> : <ViewIcon />} />
                             </InputRightElement>
                         </InputGroup>
                         <InputGroup>
-                            <Input placeholder="Enter Confirm Password" type={visible2 ? "text" : "password"} id="confirm_password" isRequired m={1} value={conpassword} onChange={(e) => setConPassword(e.target.value)} borderColor={"purple.500"} />
+                            <Input placeholder="Enter Confirm Password" type={visible2 ? "text" : "password"} id="confirm_password" isRequired m={1} value={conpassword} onChange={(e) => setConPassword(e.target.value)} borderColor={"purple.500"} bgColor={"white"} />
                             <InputRightElement m={1} >
                                 <IconButton onClick={handleClick2} size={"sm"} fontSize={"md"} colorScheme="purple" icon={visible2 ? <ViewOffIcon /> : <ViewIcon />} />
                             </InputRightElement>
                         </InputGroup>
-                        <Stack direction={"row"} w={"fit-content"} m={"auto"}>
+                        <Stack direction={["column", "column", "row", "row", "row"]} w={"fit-content"} m={"auto"}>
                             <Button display={"block"} colorScheme="blue" m={"auto"} onClick={handleRegisterCreator}>Register as Creator</Button>
                             <Button display={"block"} colorScheme="purple" m={"auto"} onClick={handleRegisterViewer}>Register as Viewer</Button>
                         </Stack>

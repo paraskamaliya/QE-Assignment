@@ -142,10 +142,10 @@ const Home = () => {
     return <Box bg={"#ffc1fb"} color={"black"}>
         <Box textAlign={"center"} p={2}>
             <Heading>Book List</Heading>
-            {auth.user.roles.includes("CREATOR") && <Box display={"flex"} gap={"5%"} justifyContent={"center"}>
-                <Button colorScheme="green" onClick={() => setOrder("old")}>Filter 10 min ago</Button>
-                <Button colorScheme="red" onClick={() => setOrder("new")}>Filter in 10 min</Button>
-                <Button colorScheme="red" onClick={() => setOrder("")}>Reset</Button>
+            {auth.user.roles.includes("CREATOR") && <Box display={"flex"} w={"50%"} m={"auto"} gap={"5%"} justifyContent={"center"} flexDirection={["column", "column", "row", "row", "row"]}>
+                <Button colorScheme="green" onClick={() => setOrder("old")} m={"auto"} mb={1} w={"fit-content"}>Filter 10 min ago</Button>
+                <Button colorScheme="red" onClick={() => setOrder("new")} m={"auto"} mb={1} w={"fit-content"}>Filter in 10 min</Button>
+                <Button colorScheme="red" onClick={() => setOrder("")} m={"auto"} mb={1} w={"fit-content"}>Reset</Button>
             </Box>}
         </Box>
         {data.length > 0 && <TableContainer m={"auto"}>

@@ -5,9 +5,30 @@ const morgan = require('morgan');
 const mongoose = require("mongoose");
 const fs = require('fs');
 const path = require('path')
+const swaggerjsdoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 
 const { userRouter } = require("./router/user.router");
 const { bookRouter } = require("./router/book.router");
+
+const options = {
+    definition: {
+        openai: "3.0.0",
+        info: {
+            title: "Swagger Demo",
+            version: "1.0.0"
+        },
+        servers: [
+            {
+                "url": "http://localhost:8080"
+            }
+        ]
+    },
+    apis: ["./router/*.js"]
+}
+const swaggerSpec = swaggerjsdoc(options);
+
+app.use("/apidocs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 const app = express();
 app.use(express.json());
