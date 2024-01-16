@@ -9,7 +9,6 @@ const Home = () => {
     const [data, setData] = useState([]);
     const [editItem, setEditItem] = useState({});
     const { isOpen, onOpen, onClose } = useDisclosure()
-    console.log(data);
 
     const fetchTheData = async () => {
         try {
@@ -43,28 +42,20 @@ const Home = () => {
                 },
                 body: JSON.stringify(editItem)
             })
-            if (res.status == 200) {
-                let data = await res.json();
-                let updated = data.map((el) => {
-                    return el._id == editItem._id ? editItem : el
-                })
+            if (res.status === 200) {
+                let updated = data.map((el) => (el._id === editItem._id ? editItem : el));
                 setData(updated);
-                return toast({
+                onClose();
+                toast({
                     title: "Book data is Updated",
                     description: "Book data is updated",
                     duration: 3000,
                     isClosable: true,
                     status: "success"
-                })
+                });
             }
         } catch (error) {
-            toast({
-                title: "Something went wrong",
-                description: "Something went wrong, Please try again",
-                duration: 3000,
-                isClosable: true,
-                status: "error"
-            })
+
         }
     };
     useEffect(() => {
@@ -94,7 +85,7 @@ const Home = () => {
                         data.length > 0 && data.map((el) => {
                             return <Tr key={el._id}>
                                 <Td textAlign={"center"} m={"auto"}>
-                                    <Image src={el.cover} alt="cover" w={"100px"} m={"auto"}/>
+                                    <Image src={el.cover} alt="cover" w={"100px"} m={"auto"} />
                                 </Td>
                                 <Td textAlign={"center"}>{el.title}</Td>
                                 <Td textAlign={"center"}>{el.description}</Td>

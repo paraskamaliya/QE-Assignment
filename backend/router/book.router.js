@@ -66,7 +66,7 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
 bookRouter.patch("/update/:id", isCreator, async (req, res) => {
     const { id } = req.params;
     try {
-        let update = await BookModel.findByIdAndDelete({ _id: id }, req.body);
+        let update = await BookModel.findByIdAndUpdate({ _id: id }, req.body);
         res.status(200).send({ "msg": "Book is updated" })
     } catch (error) {
         res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error })
