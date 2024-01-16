@@ -71,3 +71,5 @@ bookRouter.patch("/update/:id", isCreator, async (req, res) => {
         res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error })
     }
 })
+
+module.exports = { bookRouter };
