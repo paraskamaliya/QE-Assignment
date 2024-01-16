@@ -6,7 +6,7 @@ const bookRouter = express.Router();
 
 bookRouter.use(auth)
 
-bookRouter.get("/", async (req, res) => {
+bookRouter.get("/all", async (req, res) => {
     const { new: isNew, old: isOld } = req.query;
     try {
         let books;
@@ -21,19 +21,21 @@ bookRouter.get("/", async (req, res) => {
         } else {
             books = await BookModel.find();
         }
-        if (req.body.roles.includes("VIEWER")) {
-            let updated = books.filter((el) => {
-                return el.username == req.body.username
-            })
-            books = updated;
-        }
         res.status(200).send(books);
     } catch (error) {
         res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error.message })
     }
 })
 
-bookRouter.post("/", isCreator, async (req, res) => {
+// bookRouter.get("/", async (req, res) => {
+//     try {
+//         let books = await BookModel.find({ _id: req.body.userId })
+//     } catch (error) {
+
+//     }
+// })
+
+bookRouter.post("/add", isCreator, async (req, res) => {
     const { title, description, cover, author, genre, username, userId } = req.body;
     try {
         const book = new BookModel({

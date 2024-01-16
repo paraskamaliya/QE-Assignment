@@ -37,7 +37,9 @@ const Navbar = () => {
     return <Box>
         <Box display={"flex"} height={"10vh"} border={"1px solid black"} alignItems={"center"} bg={"purple"} color={"white"} justifyContent={"space-between"} padding={"0% 2%"}>
             <Box>
-                <Heading>LMS</Heading>
+                <ChakraLink as={Link} to="/" _hover={{ textDecoration: "none" }} fontSize={"larger"}>
+                    <Heading>LMS</Heading>
+                </ChakraLink>
             </Box>
             <Box>
                 {auth.isAuth == false ?
