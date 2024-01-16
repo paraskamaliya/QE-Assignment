@@ -22,7 +22,7 @@ const AddBook = () => {
             genre
         }
         try {
-            let res = await fetch(`${URL}books/`, {
+            let res = await fetch(`${URL}books/add`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`,

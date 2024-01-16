@@ -9,7 +9,7 @@ const Home = () => {
     const [data, setData] = useState([]);
     const fetchTheData = async () => {
         try {
-            let res = fetch(`${URL}/books/`, {
+            let res = fetch(`${URL}/books/all`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`

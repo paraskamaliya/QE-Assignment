@@ -27,13 +27,14 @@ bookRouter.get("/all", async (req, res) => {
     }
 })
 
-// bookRouter.get("/", async (req, res) => {
-//     try {
-//         let books = await BookModel.find({ _id: req.body.userId })
-//     } catch (error) {
-
-//     }
-// })
+bookRouter.get("/", async (req, res) => {
+    try {
+        let books = await BookModel.find({ userId: req.body.userId })
+        res.status(200).send(books);
+    } catch (error) {
+        res.status(400).send({ "msg": "Something went wrong", "err": error })
+    }
+})
 
 bookRouter.post("/add", isCreator, async (req, res) => {
     const { title, description, cover, author, genre, username, userId } = req.body;
