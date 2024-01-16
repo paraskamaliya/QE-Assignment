@@ -29,15 +29,16 @@ bookRouter.get("/", async (req, res) => {
         }
         res.status(200).send(books);
     } catch (error) {
-        res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error })
+        res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error.message })
     }
 })
 
 bookRouter.post("/", isCreator, async (req, res) => {
-    const { title, description, author, genre, username, userId } = req.body;
+    const { title, description, cover, author, genre, username, userId } = req.body;
     try {
         const book = new BookModel({
             title,
+            cover,
             description,
             author,
             genre,
