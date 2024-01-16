@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, Button, FormLabel, Heading, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormLabel, Heading, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import LoadingIndicator from "../Components/LoadingIndicator";
 import ErrorIndicator from "../Components/ErrorIndicator";
 const Home = () => {
     const URL = "https://lms-gr4j.onrender.com/";
     const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
     const auth = useSelector(store => store);
-    const [data, setData] = useState([]);
+
     const [load, setLoad] = useState(false);
     const [err, setErr] = useState(false);
-    const [editItem, setEditItem] = useState({});
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [data, setData] = useState([]);
     const [order, setOrder] = useState("");
+
+    const [editItem, setEditItem] = useState({});
 
     const fetchTheData = async () => {
         setLoad(true);
@@ -86,9 +89,9 @@ const Home = () => {
         }
     };
 
-    const handleDeleteClick = async (id) => {
+    const handleDeleteClick = async () => {
         try {
-            let res = await fetch(`${URL}books/delete/${id}`, {
+            let res = await fetch(`${URL}books/delete/${editItem._id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`,
@@ -96,7 +99,7 @@ const Home = () => {
                 }
             })
             if (res.status === 200) {
-                let updated = data.filter((el) => (el._id !== id));
+                let updated = data.filter((el) => (el._id !== editItem._id));
                 setData(updated);
                 toast({
                     title: "Book data is Deleted",
@@ -140,8 +143,9 @@ const Home = () => {
         <Box textAlign={"center"} p={2}>
             <Heading>Book List</Heading>
             {auth.user.roles.includes("CREATOR") && <Box display={"flex"} gap={"5%"} justifyContent={"center"}>
-                <Button colorScheme="green" onClick={() => setOrder("new")}>Filter 10 min ago</Button>
-                <Button colorScheme="red" onClick={() => setOrder("old")}>Filter in 10 min</Button>
+                <Button colorScheme="green" onClick={() => setOrder("old")}>Filter 10 min ago</Button>
+                <Button colorScheme="red" onClick={() => setOrder("new")}>Filter in 10 min</Button>
+                <Button colorScheme="red" onClick={() => setOrder("")}>Reset</Button>
             </Box>}
         </Box>
         {data.length > 0 && <TableContainer m={"auto"}>
@@ -178,7 +182,10 @@ const Home = () => {
                                     setEditItem(el);
                                     onOpen();
                                 }} bg={"yellow.500"} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
-                                {auth.user.roles.includes("CREATOR") && <Td textAlign={"center"}><IconButton icon={<DeleteIcon />} bg={"red.500"} onClick={() => { handleDeleteClick(el._id) }} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
+                                {auth.user.roles.includes("CREATOR") && <Td textAlign={"center"}><IconButton icon={<DeleteIcon />} bg={"red.500"} onClick={() => {
+                                    setEditItem(el);
+                                    onAlertOpen();
+                                }} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
                             </Tr>
                         })
                     }
@@ -219,6 +226,35 @@ const Home = () => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
+        <AlertDialog
+            isOpen={isAlertOpen}
+            onClose={onAlertClose}
+            isCentered
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent w={["80%", "80%", "100%", "100%", "100%"]}>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Delete Book
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        Are you sure? You want to delete Book.
+                    </AlertDialogBody>
+
+                    <AlertDialogFooter>
+                        <Button onClick={onAlertClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='red' onClick={() => {
+                            onAlertClose();
+                            handleDeleteClick();
+                        }} ml={3}>
+                            Delete
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
     </Box>
 }
 export default Home;
