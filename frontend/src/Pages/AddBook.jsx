@@ -32,12 +32,26 @@ const AddBook = () => {
                 body: JSON.stringify(payload)
             })
             if (res.status == 200) {
+                setTitle("");
+                setAuthor("");
+                setCover("");
+                setDescription("");
+                setGenre("");
                 toast({
                     title: "Book data is Added",
                     description: "Book data is added to collection",
                     duration: 3000,
                     isClosable: true,
                     status: "success"
+                })
+            }
+            else {
+                toast({
+                    title: "Something went wrong",
+                    description: "Something went wrong, Please try again",
+                    duration: 3000,
+                    isClosable: true,
+                    status: "error"
                 })
             }
         } catch (error) {

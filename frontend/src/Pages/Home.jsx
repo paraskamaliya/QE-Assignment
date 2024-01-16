@@ -1,18 +1,28 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, Button, FormLabel, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, FormLabel, Heading, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import LoadingIndicator from "../Components/LoadingIndicator";
+import ErrorIndicator from "../Components/ErrorIndicator";
 const Home = () => {
     const URL = "https://lms-gr4j.onrender.com/";
     const toast = useToast();
     const auth = useSelector(store => store);
     const [data, setData] = useState([]);
+    const [load, setLoad] = useState(false);
+    const [err, setErr] = useState(false);
     const [editItem, setEditItem] = useState({});
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [order, setOrder] = useState("");
 
     const fetchTheData = async () => {
+        setLoad(true);
+        let url = `${URL}books/`
+        if (order !== "") {
+            url += `?${order}=1`
+        }
         try {
-            let res = await fetch(`${URL}books/`, {
+            let res = await fetch(`${url}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`
@@ -20,8 +30,10 @@ const Home = () => {
             })
             let data = await res.json();
             setData(data);
+            setLoad(false);
         } catch (error) {
-            console.log(error);
+            setLoad(false);
+            setErr(true);
         }
     }
 
@@ -54,14 +66,84 @@ const Home = () => {
                     status: "success"
                 });
             }
+            else {
+                toast({
+                    title: "Something went wrong",
+                    description: "Something went wrong, Please try again",
+                    duration: 3000,
+                    isClosable: true,
+                    status: "error"
+                });
+            }
         } catch (error) {
+            toast({
+                title: "Something went wrong",
+                description: "Something went wrong, Please try again",
+                duration: 3000,
+                isClosable: true,
+                status: "error"
+            });
+        }
+    };
 
+    const handleDeleteClick = async (id) => {
+        try {
+            let res = await fetch(`${URL}books/delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${auth.token.split('"')[0]}`,
+                    "content-type": "application/json"
+                }
+            })
+            if (res.status === 200) {
+                let updated = data.filter((el) => (el._id !== id));
+                setData(updated);
+                toast({
+                    title: "Book data is Deleted",
+                    description: "Book data is deleted",
+                    duration: 3000,
+                    isClosable: true,
+                    status: "success"
+                });
+            }
+            else {
+                toast({
+                    title: "Something went wrong",
+                    description: "Something went wrong, Please try again",
+                    duration: 3000,
+                    isClosable: true,
+                    status: "error"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Something went wrong",
+                description: "Something went wrong, Please try again",
+                duration: 3000,
+                isClosable: true,
+                status: "error"
+            });
         }
     };
     useEffect(() => {
         fetchTheData();
-    }, [])
+    }, [order])
+
+
+    if (load) {
+        return <LoadingIndicator />
+    }
+    if (err) {
+        return <ErrorIndicator />
+    }
     return <Box bg={"#ffc1fb"} color={"black"}>
+        <Box textAlign={"center"} p={2}>
+            <Heading>Book List</Heading>
+            {auth.user.roles.includes("CREATOR") && <Box display={"flex"} gap={"5%"} justifyContent={"center"}>
+                <Button colorScheme="green" onClick={() => setOrder("new")}>Filter 10 min ago</Button>
+                <Button colorScheme="red" onClick={() => setOrder("old")}>Filter in 10 min</Button>
+            </Box>}
+        </Box>
         {data.length > 0 && <TableContainer m={"auto"}>
             <Table>
                 <Thead>
@@ -96,7 +178,7 @@ const Home = () => {
                                     setEditItem(el);
                                     onOpen();
                                 }} bg={"yellow.500"} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
-                                {auth.user.roles.includes("CREATOR") && <Td textAlign={"center"}><IconButton icon={<DeleteIcon />} bg={"red.500"} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
+                                {auth.user.roles.includes("CREATOR") && <Td textAlign={"center"}><IconButton icon={<DeleteIcon />} bg={"red.500"} onClick={() => { handleDeleteClick(el._id) }} color={"white"} _hover={{ bgColor: "none" }} /></Td>}
                             </Tr>
                         })
                     }

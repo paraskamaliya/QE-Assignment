@@ -11,20 +11,18 @@ bookRouter.get("/", async (req, res) => {
     try {
         let books;
         if (req.body.roles.includes("VIEW_ALL")) {
+            books = await BookModel.find();
+        } else if (req.body.roles.includes("VIEWER")) {
+            const tenMinutesAgo = new Date();
+            tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
+            console.log(tenMinutesAgo);
             if (isNew) {
-                const tenMinutesAgo = new Date();
-                tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-                books = await BookModel.find({ date: { $gt: tenMinutesAgo } }).sort({ date: 1 });
+                books = await BookModel.find({ userId: req.body.userId, date: { $gte: tenMinutesAgo } }).sort({ date: 1 });
             } else if (isOld) {
-                const tenMinutesAgo = new Date();
-                tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-                books = await BookModel.find({ date: { $lte: tenMinutesAgo } }).sort({ date: -1 });
+                books = await BookModel.find({ userId: req.body.userId, date: { $lt: tenMinutesAgo } }).sort({ date: -1 });
             } else {
-                books = await BookModel.find();
+                books = await BookModel.find({ userId: req.body.userId });
             }
-        }
-        else if (req.body.roles.includes("VIEWER")) {
-            books = await BookModel.find({ userId: req.body.userId })
         }
         res.status(200).send(books);
     } catch (error) {
