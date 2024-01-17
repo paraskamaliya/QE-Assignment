@@ -40,10 +40,6 @@ app.use("/books", bookRouter)
 const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
 app.use(morgan('combined', { stream: logStream }));
 
-app.get("/", (req, res) => {
-    res.end("Welcome to LMS");
-})
-
 app.listen(process.env.PORT, async () => {
     try {
         const connection = await mongoose.connect(process.env.mongoURL)

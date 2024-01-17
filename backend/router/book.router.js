@@ -106,9 +106,9 @@ bookRouter.get("/", async (req, res) => {
  * /books/
  *  post:
  *      summary: to add book data
- *      tags:[users]
+ *      tags: [Books]
  *      requestBody:
- *          required:true
+ *          required: true
  *          content:
  *              application/json:
  *                  schema:
@@ -182,7 +182,7 @@ bookRouter.post("/", isCreator, async (req, res) => {
 * @swagger
 * /books/delete/{id}:
 *   delete:
-*       summary: Remove the book by id
+*       summary: Remove the book by ID
 *       tags: [Books]
 *       parameters:
 *           - in: path
@@ -190,12 +190,12 @@ bookRouter.post("/", isCreator, async (req, res) => {
 *               schema:
 *                   type: string
 *               required: true
-*               description: The book id
+*               description: The book ID
 *       responses:
 *           200:
-*               description: The user was deleted
+*               description: The book was deleted
 *           404:
-*               description: The user was not found
+*               description: The book was not found
 */
 
 
@@ -212,8 +212,8 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
 /**
 * @swagger
 * /books/update/{id}:
-*   delete:
-*       summary: update the books by id
+*   patch:
+*       summary: Update the book by ID
 *       tags: [Books]
 *       parameters:
 *           - in: path
@@ -221,10 +221,10 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
 *               schema:
 *                   type: string
 *               required: true
-*               description: The book id
+*               description: The book ID
 *       responses:
  *          200:
- *              description: Data is updated
+ *              description: Book data is updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -232,9 +232,9 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
  *                          properties:
  *                              msg:
  *                                  type: string
- *                                  description: the message of result
+ *                                  description: The message of the result
  *          400:
- *              description: Data is updated
+ *              description: Failed to update book data
  *              content:
  *                  application/json:
  *                      schema:
@@ -242,16 +242,16 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
  *                          properties:
  *                              msg:
  *                                  type: string
- *                                  description: the message of result
+ *                                  description: The message of the result
  *                              err:
  *                                  type: object
- *                                  description: the error object
+ *                                  description: The error object
 */
 
 bookRouter.patch("/update/:id", isCreator, async (req, res) => {
     const { id } = req.params;
     try {
-        let update = await BookModel.findByIdAndUpdate({ _id: id }, req.body);
+        await BookModel.findByIdAndUpdate({ _id: id }, req.body);
         res.status(200).send({ "msg": "Book is updated" })
     } catch (error) {
         res.status(400).send({ "msg": "Something went wrong,Please try again", "err": error })

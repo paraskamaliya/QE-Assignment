@@ -35,12 +35,12 @@ const { ListModel } = require("../model/list.model");
 
 /**
  * @swagger
- * /users/register
+ * /users/register:
  *  post:
  *      summary: To post user data
- *      tags:[users]
+ *      tags: [users]
  *      requestBody:
- *          required:true
+ *          required: true
  *          content:
  *              application/json:
  *                  schema:
@@ -122,12 +122,12 @@ userRouter.post("/register", async (req, res) => {
 
 /**
  * @swagger
- * /users/login
+ * /users/login:
  *  post:
  *      summary: to login using email and password
- *      tags:[users]
+ *      tags: [users]
  *      requestBody:
- *          required:true
+ *          required: true
  *          content:
  *              application/json:
  *                  schema:
@@ -222,7 +222,7 @@ userRouter.post("/login", async (req, res) => {
  * /users/logout:
  *  get:
  *      summary: for logging out
- *      tags: [Users]
+ *      tags: [users]
  *      responses:
  *          200:
  *              description: logout successfull
