@@ -30,256 +30,250 @@ const Login = () => {
     const handleClick1 = () => setVisible1(!visible1)
     const handleClick2 = () => setVisible2(!visible2)
     const loginhandleClick = () => setLoginVisible(!LoginVisible)
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const payload = {
             email: loginEmail,
             password: loginPass
         };
+
         setLoad(true);
-        axios.post(`${URL}users/login`, payload, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then((res) => {
-                setLoad(false);
-                if (res.status === 200) {
-                    toast({
-                        title: "Successfully logged in",
-                        description: "You are successfully logged in",
-                        status: "success",
-                        duration: 4000,
-                        position: "bottom",
-                        isClosable: true
-                    })
-                    dispatch({ type: LOGIN, payload: res.data })
-                    navigate("/books")
+
+        try {
+            const res = await axios.post(`${URL}users/login`, payload, {
+                headers: {
+                    "Content-Type": "application/json"
                 }
-                else if (res.status === 201) {
-                    toast({
-                        title: "Something went wrong.",
-                        description: "Something went wrong, While checking password.",
-                        status: "error",
-                        position: "bottom",
-                        duration: 3000,
-                        isClosable: true
-                    })
-                }
-                else if (res.status === 202) {
-                    toast({
-                        title: "User is not Registered",
-                        description: "User is not Registered, Please register.",
-                        status: "error",
-                        position: "bottom",
-                        duration: 3000,
-                        isClosable: true
-                    })
-                }
-            })
-            .catch(() => {
-                setLoad(false);
+            });
+
+            setLoad(false);
+
+            if (res.status === 200) {
                 toast({
-                    title: "Login Failed",
-                    description: "Something went wrong, Please try again",
-                    status: "error",
+                    title: "Successfully logged in",
+                    description: "You are successfully logged in",
+                    status: "success",
                     duration: 4000,
                     position: "bottom",
                     isClosable: true
-                })
+                });
+
+                dispatch({ type: LOGIN, payload: res.data });
+                navigate("/books");
+            } else if (res.status === 201) {
+                toast({
+                    title: "Something went wrong.",
+                    description: "Something went wrong while checking the password.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                });
+            } else if (res.status === 202) {
+                toast({
+                    title: "User is not Registered",
+                    description: "User is not registered, please register.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                });
+            }
+        } catch (error) {
+            setLoad(false);
+            toast({
+                title: "Login Failed",
+                description: "Something went wrong, please try again",
+                status: "error",
+                duration: 4000,
+                position: "bottom",
+                isClosable: true
             });
+        }
     };
 
 
-    const handleRegisterCreator = (e) => {
+
+    const handleRegisterCreator = async () => {
         if (conpassword === password) {
-            if (username == "" || email == "") {
+            if (username === "" || email === "") {
                 toast({
-                    title: "Please required information",
-                    description: "Please fill all the information to continue",
+                    title: "Please provide required information",
+                    description: "Please fill in all the information to continue",
                     status: "error",
                     duration: 4000,
                     position: "bottom",
                     isClosable: true
-                })
+                });
                 return;
             }
-            e.preventDefault();
             const payload = {
-                "username": username,
-                "email": email,
-                "password": password,
-                "roles": ["CREATOR", "VIEWER"]
-            }
-            fetch(`${URL}users/register`, {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            })
-                .then((res) => {
-                    if (res.status === 200) {
-                        toast({
-                            title: 'Account created',
-                            description: "We've created your account for you",
-                            status: 'success',
-                            position: "bottom",
-                            duration: 4000,
-                            isClosable: true,
-                        })
-                        setUsername("");
-                        setConPassword("");
-                        setEmail("");
-                        setPassword("");
-                    }
-                    else if (res.status === 201) {
-                        toast({
-                            title: "Email is Already Present",
-                            description: "This email ID is already exist, Please use another email ID.",
-                            status: "info",
-                            position: "bottom",
-                            duration: 3000,
-                            isClosable: true
-                        })
-                    }
-                    else if (res.status === 202) {
-                        toast({
-                            title: "Something went wrong.",
-                            description: "Something went wrong, While hashing.",
-                            status: "error",
-                            position: "bottom",
-                            duration: 3000,
-                            isClosable: true
-                        })
-                    }
-                    else {
-                        toast({
-                            title: 'Registration failed',
-                            description: "Something went wrong",
-                            status: 'error',
-                            duration: 4000,
-                            isClosable: true,
-                        })
-                        console.log(res)
-                    }
-                })
-                .then((data) => data)
-                .catch((err) =>
+                username: username,
+                email: email,
+                password: password,
+                roles: ["CREATOR", "VIEWER"]
+            };
+
+            try {
+                const response = await fetch(`${URL}users/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.status === 200) {
+                    toast({
+                        title: 'Account created',
+                        description: "We've created your account for you",
+                        status: 'success',
+                        position: "bottom",
+                        duration: 4000,
+                        isClosable: true,
+                    });
+
+                    setUsername("");
+                    setConPassword("");
+                    setEmail("");
+                    setPassword("");
+                } else if (response.status === 201) {
+                    toast({
+                        title: "Email is Already Present",
+                        description: "This email ID is already exist, Please use another email ID.",
+                        status: "info",
+                        position: "bottom",
+                        duration: 3000,
+                        isClosable: true
+                    });
+                } else if (response.status === 202) {
                     toast({
                         title: "Something went wrong.",
-                        description: "Something went wrong, Please try again.",
+                        description: "Something went wrong while hashing.",
                         status: "error",
                         position: "bottom",
                         duration: 3000,
                         isClosable: true
-                    })
-                )
-        }
-        else {
+                    });
+                } else {
+                    toast({
+                        title: 'Registration failed',
+                        description: "Something went wrong",
+                        status: 'error',
+                        duration: 4000,
+                        isClosable: true,
+                    });
+                }
+            } catch (error) {
+                toast({
+                    title: "Something went wrong.",
+                    description: "Something went wrong, Please try again.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                });
+            }
+        } else {
             toast({
                 title: 'Password Error',
-                description: "Password and Confirm password should be same",
+                description: "Password and Confirm password should be the same",
                 status: 'info',
                 position: "bottom",
                 duration: 4000,
                 isClosable: true,
-            })
+            });
         }
-    }
-    const handleRegisterViewer = (e) => {
+    };
+
+    const handleRegisterViewer = async () => {
         if (conpassword === password) {
-            if (username == "" || email == "") {
+            if (username === "" || email === "") {
                 toast({
-                    title: "Please required information",
-                    description: "Please fill all the information to continue",
+                    title: "Please provide required information",
+                    description: "Please fill in all the information to continue",
                     status: "error",
                     duration: 4000,
                     position: "bottom",
                     isClosable: true
-                })
+                });
                 return;
             }
-            e.preventDefault();
             const payload = {
-                "username": username,
-                "email": email,
-                "password": password,
-                "roles": ["VIEW_ALL"]
-            }
-            fetch(`${URL}users/register`, {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            })
-                .then((res) => {
-                    if (res.status === 200) {
-                        toast({
-                            title: 'Account created',
-                            description: "We've created your account for you",
-                            status: 'success',
-                            position: "bottom",
-                            duration: 4000,
-                            isClosable: true,
-                        })
-                        setUsername("");
-                        setConPassword("");
-                        setEmail("");
-                        setPassword("");
-                    }
-                    else if (res.status === 201) {
-                        toast({
-                            title: "Email is Already Present",
-                            description: "This email ID is already exist, Please use another email ID.",
-                            status: "info",
-                            position: "bottom",
-                            duration: 3000,
-                            isClosable: true
-                        })
-                    }
-                    else if (res.status === 202) {
-                        toast({
-                            title: "Something went wrong.",
-                            description: "Something went wrong, While hashing.",
-                            status: "error",
-                            position: "bottom",
-                            duration: 3000,
-                            isClosable: true
-                        })
-                    }
-                    else {
-                        toast({
-                            title: 'Registration failed',
-                            description: "Something went wrong",
-                            status: 'error',
-                            duration: 4000,
-                            isClosable: true,
-                        })
-                        console.log(res)
-                    }
-                })
-                .then((data) => data)
-                .catch((err) =>
+                username: username,
+                email: email,
+                password: password,
+                roles: ["VIEW_ALL"]
+            };
+
+            try {
+                const response = await fetch(`${URL}users/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.status === 200) {
+                    toast({
+                        title: 'Account created',
+                        description: "We've created your account for you",
+                        status: 'success',
+                        position: "bottom",
+                        duration: 4000,
+                        isClosable: true,
+                    });
+
+                    setUsername("");
+                    setConPassword("");
+                    setEmail("");
+                    setPassword("");
+                } else if (response.status === 201) {
+                    toast({
+                        title: "Email is Already Present",
+                        description: "This email ID is already exist, Please use another email ID.",
+                        status: "info",
+                        position: "bottom",
+                        duration: 3000,
+                        isClosable: true
+                    });
+                } else if (response.status === 202) {
                     toast({
                         title: "Something went wrong.",
-                        description: "Something went wrong, Please try again.",
+                        description: "Something went wrong while hashing.",
                         status: "error",
                         position: "bottom",
                         duration: 3000,
                         isClosable: true
-                    })
-                )
-        }
-        else {
+                    });
+                } else {
+                    toast({
+                        title: 'Registration failed',
+                        description: "Something went wrong",
+                        status: 'error',
+                        duration: 4000,
+                        isClosable: true,
+                    });
+                }
+            } catch (error) {
+                toast({
+                    title: "Something went wrong.",
+                    description: "Something went wrong, Please try again.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                });
+            }
+        } else {
             toast({
                 title: 'Password Error',
-                description: "Password and Confirm password should be same",
+                description: "Password and Confirm password should be the same",
                 status: 'info',
                 position: "bottom",
                 duration: 4000,
                 isClosable: true,
-            })
+            });
         }
     }
 
