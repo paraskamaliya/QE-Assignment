@@ -24,7 +24,7 @@ const options = {
         },
         servers: [
             {
-                "url": "https://lms-gr4j.onrender.com/"
+                "url": "http://localhost:5000"
             }
         ]
     },
