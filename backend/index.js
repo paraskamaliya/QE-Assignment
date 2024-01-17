@@ -8,8 +8,8 @@ const path = require('path')
 const swaggerjsdoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 
-const { userRouter } = require("./router/user.router");
-const { bookRouter } = require("./router/book.router");
+const { userRouter } = require("./routes/user.router");
+const { bookRouter } = require("./routes/book.router");
 const app = express();
 
 const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
