@@ -11,6 +11,7 @@ const swaggerUI = require("swagger-ui-express");
 const { userRouter } = require("./router/user.router");
 const { bookRouter } = require("./router/book.router");
 
+const app = express();
 const options = {
     definition: {
         openai: "3.0.0",
@@ -30,7 +31,6 @@ const swaggerSpec = swaggerjsdoc(options);
 
 app.use("/apidocs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-const app = express();
 app.use(express.json());
 app.use(cors());
 
