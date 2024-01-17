@@ -31,6 +31,16 @@ const Home = () => {
                     "Authorization": `Bearer ${auth.token.split('"')[0]}`
                 }
             })
+            if (res.status !== 200) {
+                toast({
+                    title: "Something went wrong.",
+                    description: "Something went wrong, Please try again.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                })
+            }
             let data = await res.json();
             setData(data);
             setLoad(false);
@@ -69,14 +79,25 @@ const Home = () => {
                     status: "success"
                 });
             }
-            else {
+            else if (res.status === 201) {
                 toast({
-                    title: "Something went wrong",
-                    description: "Something went wrong, Please try again",
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
                     duration: 3000,
-                    isClosable: true,
-                    status: "error"
-                });
+                    isClosable: true
+                })
+            }
+            else if (res.status === 400) {
+                toast({
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                })
             }
         } catch (error) {
             toast({
@@ -109,14 +130,25 @@ const Home = () => {
                     status: "success"
                 });
             }
-            else {
+            else if (res.status === 201) {
                 toast({
-                    title: "Something went wrong",
-                    description: "Something went wrong, Please try again",
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
                     duration: 3000,
-                    isClosable: true,
-                    status: "error"
-                });
+                    isClosable: true
+                })
+            }
+            else if (res.status === 400) {
+                toast({
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                })
             }
         } catch (error) {
             toast({

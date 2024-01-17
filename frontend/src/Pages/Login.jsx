@@ -55,13 +55,23 @@ const Login = () => {
                     dispatch({ type: LOGIN, payload: res.data })
                     navigate("/books")
                 }
-                else {
+                else if (res.status === 201) {
                     toast({
-                        title: "Login Failed",
-                        description: "Something went wrong, Please try again",
+                        title: "Something went wrong.",
+                        description: "Something went wrong, While checking password.",
                         status: "error",
-                        duration: 4000,
                         position: "bottom",
+                        duration: 3000,
+                        isClosable: true
+                    })
+                }
+                else if (res.status === 202) {
+                    toast({
+                        title: "User is not Registered",
+                        description: "User is not Registered, Please register.",
+                        status: "error",
+                        position: "bottom",
+                        duration: 3000,
                         isClosable: true
                     })
                 }
@@ -122,6 +132,26 @@ const Login = () => {
                         setEmail("");
                         setPassword("");
                     }
+                    else if (res.status === 201) {
+                        toast({
+                            title: "Email is Already Present",
+                            description: "This email ID is already exist, Please use another email ID.",
+                            status: "info",
+                            position: "bottom",
+                            duration: 3000,
+                            isClosable: true
+                        })
+                    }
+                    else if (res.status === 202) {
+                        toast({
+                            title: "Something went wrong.",
+                            description: "Something went wrong, While hashing.",
+                            status: "error",
+                            position: "bottom",
+                            duration: 3000,
+                            isClosable: true
+                        })
+                    }
                     else {
                         toast({
                             title: 'Registration failed',
@@ -132,10 +162,18 @@ const Login = () => {
                         })
                         console.log(res)
                     }
-                    res.json()
                 })
                 .then((data) => data)
-                .catch((err) => err)
+                .catch((err) =>
+                    toast({
+                        title: "Something went wrong.",
+                        description: "Something went wrong, Please try again.",
+                        status: "error",
+                        position: "bottom",
+                        duration: 3000,
+                        isClosable: true
+                    })
+                )
         }
         else {
             toast({
@@ -190,6 +228,26 @@ const Login = () => {
                         setEmail("");
                         setPassword("");
                     }
+                    else if (res.status === 201) {
+                        toast({
+                            title: "Email is Already Present",
+                            description: "This email ID is already exist, Please use another email ID.",
+                            status: "info",
+                            position: "bottom",
+                            duration: 3000,
+                            isClosable: true
+                        })
+                    }
+                    else if (res.status === 202) {
+                        toast({
+                            title: "Something went wrong.",
+                            description: "Something went wrong, While hashing.",
+                            status: "error",
+                            position: "bottom",
+                            duration: 3000,
+                            isClosable: true
+                        })
+                    }
                     else {
                         toast({
                             title: 'Registration failed',
@@ -200,10 +258,18 @@ const Login = () => {
                         })
                         console.log(res)
                     }
-                    res.json()
                 })
                 .then((data) => data)
-                .catch((err) => err)
+                .catch((err) =>
+                    toast({
+                        title: "Something went wrong.",
+                        description: "Something went wrong, Please try again.",
+                        status: "error",
+                        position: "bottom",
+                        duration: 3000,
+                        isClosable: true
+                    })
+                )
         }
         else {
             toast({

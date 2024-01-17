@@ -45,13 +45,24 @@ const AddBook = () => {
                     status: "success"
                 })
             }
-            else {
+            else if (res.status === 201) {
                 toast({
-                    title: "Something went wrong",
-                    description: "Something went wrong, Please try again",
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
                     duration: 3000,
-                    isClosable: true,
-                    status: "error"
+                    isClosable: true
+                })
+            }
+            else if (res.status === 400) {
+                toast({
+                    title: "You are not authorized",
+                    description: "You are not authorized, Please login.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
                 })
             }
         } catch (error) {

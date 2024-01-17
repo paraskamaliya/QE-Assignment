@@ -30,6 +30,16 @@ const Navbar = () => {
                     status: "success"
                 })
             }
+            else {
+                toast({
+                    title: "Something went wrong.",
+                    description: "Something went wrong, while logout.",
+                    status: "error",
+                    position: "bottom",
+                    duration: 3000,
+                    isClosable: true
+                })
+            }
         } catch (error) {
             console.log(error);
         }
