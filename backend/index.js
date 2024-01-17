@@ -10,22 +10,25 @@ const swaggerUI = require("swagger-ui-express");
 
 const { userRouter } = require("./router/user.router");
 const { bookRouter } = require("./router/book.router");
-
 const app = express();
+
+const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
+app.use(morgan('combined', { stream: logStream }));
+
 const options = {
     definition: {
         openai: "3.0.0",
         info: {
-            title: "Swagger Demo",
+            title: "LMS Api",
             version: "1.0.0"
         },
         servers: [
             {
-                "url": "https://lms-gr4j.onrender.com/"
+                "url": "http://localhost:5000"
             }
         ]
     },
-    apis: ["./router/*.js"]
+    apis: ["./routes/*.js"]
 }
 const swaggerSpec = swaggerjsdoc(options);
 
@@ -35,10 +38,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/users", userRouter);
-app.use("/books", bookRouter)
-
-const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
-app.use(morgan('combined', { stream: logStream }));
+app.use("/books", bookRouter);
 
 app.listen(process.env.PORT, async () => {
     try {
@@ -47,4 +47,4 @@ app.listen(process.env.PORT, async () => {
     } catch (error) {
         console.log(error);
     }
-})
+});

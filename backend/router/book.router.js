@@ -36,10 +36,10 @@ bookRouter.use(auth);
  *                  description: The date of book posted
  *              username:
  *                  type: string
- *                  description: The username of user who have posted
+ *                  description: The username of the user who posted the book
  *              userId:
  *                  type: string
- *                  description: The user Id of user who have posted
+ *                  description: The user Id of the user who posted the book
  */
 
 /**
@@ -53,7 +53,7 @@ bookRouter.use(auth);
  * @swagger
  * /books/:
  *  get:
- *      summary: this will get all the books of related to user role
+ *      summary: Get all the books related to the user role
  *      tags: [Books]
  *      responses:
  *          200:
@@ -62,10 +62,10 @@ bookRouter.use(auth);
  *                  application/json:
  *                      schema:
  *                          type: array
- *                          item:
+ *                          items:
  *                              $ref: '#/components/schemas/Books'
  *          400:
- *              description: some error
+ *              description: Some error
  *              content:
  *                  application/json:
  *                      schema:
@@ -73,10 +73,10 @@ bookRouter.use(auth);
  *                          properties:
  *                              msg:
  *                                  type: string
- *                                  description: the message of result
+ *                                  description: The message of the result
  *                              err:
  *                                  type: string
- *                                  description: the error message
+ *                                  description: The error message
  */
 bookRouter.get("/", async (req, res) => {
     const { new: isNew, old: isOld } = req.query;
@@ -103,9 +103,9 @@ bookRouter.get("/", async (req, res) => {
 
 /**
  * @swagger
- * /books/
+ * /books/:
  *  post:
- *      summary: to add book data
+ *      summary: Add book data
  *      tags: [Books]
  *      requestBody:
  *          required: true
@@ -144,7 +144,7 @@ bookRouter.get("/", async (req, res) => {
  *                                  type: object
  *                                  description: The book data which is posted
  *          400:
- *              description: some error
+ *              description: Some error
  *              content:
  *                  application/json:
  *                      schema:
@@ -152,10 +152,10 @@ bookRouter.get("/", async (req, res) => {
  *                          properties:
  *                              msg:
  *                                  type: string
- *                                  description: the message of result
+ *                                  description: The message of result
  *                              err:
  *                                  type: object
- *                                  description: the error object
+ *                                  description: The error object
  */
 
 bookRouter.post("/", isCreator, async (req, res) => {
@@ -179,24 +179,23 @@ bookRouter.post("/", isCreator, async (req, res) => {
 })
 
 /**
-* @swagger
-* /books/delete/{id}:
-*   delete:
-*       summary: Remove the book by ID
-*       tags: [Books]
-*       parameters:
-*           - in: path
-*               name: id
-*               schema:
-*                   type: string
-*               required: true
-*               description: The book ID
-*       responses:
-*           200:
-*               description: The book was deleted
-*           404:
-*               description: The book was not found
-*/
+ * @swagger
+ * /books/delete/{id}:
+ *   delete:
+ *       summary: Remove the book by ID
+ *       tags: [Books]
+ *       parameters:
+ *           name: id
+ *           schema:
+ *               type: string
+ *           required: true
+ *           description: The book ID
+ *       responses:
+ *           200:
+ *               description: The book was deleted
+ *           404:
+ *               description: The book was not found
+ */
 
 
 bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
@@ -210,43 +209,43 @@ bookRouter.delete("/delete/:id", isCreator, async (req, res) => {
 })
 
 /**
-* @swagger
-* /books/update/{id}:
-*   patch:
-*       summary: Update the book by ID
-*       tags: [Books]
-*       parameters:
-*           - in: path
-*               name: id
-*               schema:
-*                   type: string
-*               required: true
-*               description: The book ID
-*       responses:
- *          200:
- *              description: Book data is updated
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              msg:
- *                                  type: string
- *                                  description: The message of the result
- *          400:
- *              description: Failed to update book data
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              msg:
- *                                  type: string
- *                                  description: The message of the result
- *                              err:
- *                                  type: object
- *                                  description: The error object
-*/
+ * @swagger
+ * /books/update/{id}:
+ *   patch:
+ *       summary: Update the book by ID
+ *       tags: [Books]
+ *       parameters:
+ *           - in: path
+ *             name: id
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: The book ID
+ *       responses:
+ *           200:
+ *               description: Book data is updated
+ *               content:
+ *                   application/json:
+ *                       schema:
+ *                           type: object
+ *                           properties:
+ *                               msg:
+ *                                   type: string
+ *                                   description: The message of the result
+ *           400:
+ *               description: Failed to update book data
+ *               content:
+ *                   application/json:
+ *                       schema:
+ *                           type: object
+ *                           properties:
+ *                               msg:
+ *                                   type: string
+ *                                   description: The message of the result
+ *                               err:
+ *                                   type: object
+ *                                   description: The error object
+ */
 
 bookRouter.patch("/update/:id", isCreator, async (req, res) => {
     const { id } = req.params;
